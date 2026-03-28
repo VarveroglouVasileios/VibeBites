@@ -267,11 +267,8 @@ async function deleteRecipe () {
 
         <!-- Right Column: Sidebar Stats & CTA -->
         <aside class="h-fit space-y-6 lg:sticky lg:top-28 lg:col-span-4">
-          <!-- Enter Cooking Mode Card -->
+          <!-- Cooking Mode Card (Single Instance) -->
           <div class="rounded-3xl bg-gradient-to-br from-brand-500 to-brand-600 p-8 text-white shadow-xl relative overflow-hidden group">
-            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
-              <span class="material-symbols-outlined text-6xl">restaurant_menu</span>
-            </div>
             <h3 class="mb-4 font-display text-2xl font-extrabold relative z-10">
               {{ cookingMode ? 'Cooking Mode Active' : 'Έτοιμος για μαγείρεμα;' }}
             </h3>
@@ -291,47 +288,22 @@ async function deleteRecipe () {
             </button>
           </div>
 
-          <!-- Recipe Meta info -->
-          <div
-            class="glass p-6"
-          >
-            <h4 class="mb-6 flex items-center gap-2 font-display font-bold text-surface-900 dark:text-white uppercase tracking-widest text-xs">
-              <span class="material-symbols-outlined text-brand-500 text-sm">info</span>
-              Πληροφορίες
+          <!-- Recipe Actions (Simplified) -->
+          <div class="glass p-6 space-y-4">
+            <h4 class="mb-4 flex items-center gap-2 font-display font-bold text-surface-900 dark:text-white uppercase tracking-widest text-[10px]">
+              Ενέργειες Συνταγής
             </h4>
-            <div class="grid grid-cols-2 gap-4">
-              <div
-                v-if="recipe.servings"
-                class="rounded-2xl bg-surface-50 dark:bg-surface-900/50 p-4 border dark:border-surface-800"
-              >
-                <span class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-surface-500">Μερίδες</span>
-                <span class="block font-display text-xl font-bold text-surface-900 dark:text-white">{{ recipe.servings }}</span>
-              </div>
-              <div
-                v-if="recipe.cook_time"
-                class="rounded-2xl bg-surface-50 dark:bg-surface-900/50 p-4 border dark:border-surface-800"
-              >
-                <span class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-surface-500">Χρόνος</span>
-                <span class="block font-display text-xl font-bold text-surface-900 dark:text-white">{{ recipe.cook_time }}′</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Social Share -->
-          <div class="glass p-6 space-y-3">
-            <h4 class="mb-4 flex items-center gap-2 font-display font-bold text-surface-900 dark:text-white uppercase tracking-widest text-xs">
-              <span class="material-symbols-outlined text-brand-500 text-sm">share</span>
-              Κοινοποίηση
-            </h4>
+            
             <button
-              class="flex w-full items-center justify-center gap-2 rounded-2xl border dark:border-surface-700 bg-white dark:bg-surface-800 py-4 font-display text-sm font-bold text-surface-900 dark:text-white shadow-sm transition-all hover:bg-surface-50 dark:hover:bg-surface-700 active:scale-95"
+              class="flex w-full items-center justify-center gap-3 rounded-2xl border-2 dark:border-surface-700 bg-white dark:bg-surface-800 py-3.5 font-display text-sm font-bold text-surface-900 dark:text-white shadow-sm transition-all hover:bg-surface-50 dark:hover:bg-surface-700 active:scale-95"
               @click="onShare"
             >
               <span class="material-symbols-outlined text-lg">share</span>
               {{ canNativeShare ? 'Μοιράσου το' : 'Αντιγραφή Link' }}
             </button>
+
             <button
-              class="flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-500/10 py-4 font-display text-sm font-bold text-brand-600 dark:text-brand-400 shadow-sm transition-all hover:bg-brand-500/20 active:scale-95"
+              class="flex w-full items-center justify-center gap-3 rounded-2xl bg-brand-500/10 dark:bg-brand-500/20 py-3.5 font-display text-sm font-bold text-brand-600 dark:text-brand-400 shadow-sm transition-all hover:bg-brand-500/20 active:scale-95"
               @click="showSocialModal = true"
             >
               <span class="material-symbols-outlined text-lg">auto_awesome</span>
