@@ -5,6 +5,8 @@ definePageMeta({ middleware: 'admin' })
 
 useHead({ title: 'Νέα Συνταγή' })
 
+const authStore = useAuthStore()
+const user = useSupabaseUser()
 const recipeStore = useRecipeStore()
 const { uploadMultiple } = useMediaUpload()
 const router = useRouter()
@@ -73,10 +75,10 @@ async function handleSubmit() {
 
   submitting.value = true
   try {
-    // Upload media
+    // Upload media using user ID as folder for RLS compliance
     let mediaUrls: string[] = []
-    if (form.media_files.length > 0) {
-      mediaUrls = await uploadMultiple(form.media_files, 'recipe-media', Date.now().toString())
+    if (form.media_files.length > 0 && user.value) {
+      mediaUrls = await uploadMultiple(form.media_files, 'recipe-media', user.value.id)
     }
 
     // Filter out empty ingredients/steps

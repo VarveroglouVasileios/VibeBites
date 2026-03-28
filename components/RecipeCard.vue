@@ -79,6 +79,8 @@ async function confirmDelete() {
         <NuxtImg
           :src="coverImage"
           :alt="recipe.title"
+          width="400"
+          height="300"
           format="webp"
           loading="lazy"
           class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"

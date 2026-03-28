@@ -7,6 +7,14 @@
 import { createClient } from '@supabase/supabase-js'
 
 export default defineEventHandler(async () => {
+  // Security: Only allow in development
+  if (process.env.NODE_ENV === 'production') {
+    throw createError({
+      statusCode: 403,
+      statusMessage: 'Seed endpoint is disabled in production.',
+    })
+  }
+
   const supabaseUrl = process.env.SUPABASE_URL || ''
   const supabaseKey = process.env.SUPABASE_KEY || ''
 

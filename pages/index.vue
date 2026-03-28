@@ -1,6 +1,7 @@
 <script setup lang="ts">
 useHead({
-  title: 'Αρχική',
+  title: 'VibeBites',
+  titleTemplate: '',
   meta: [
     { name: 'description', content: 'VibeBites – Ανακάλυψε, μοιράσου και μαγείρεψε υπέροχες συνταγές με AI βοηθό, cooking mode και κοινότητα.' },
     { property: 'og:title', content: 'VibeBites – Social Recipes' },

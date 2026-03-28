@@ -18,26 +18,37 @@ Deno.serve(async (req) => {
 
     const { record } = await req.json()
 
-    // Log the message receipt (In a real app, send email here)
-    console.log(`New contact message from ${record.name} (${record.email}): ${record.message}`)
+    // Log the message receipt (Avoid logging PII like name/email)
+    console.log(`New contact message received. ID: ${record.id}`)
 
-    /**
-     * EXAMPLE: Sending email via Resend
-     * 
-     * await fetch('https://api.resend.com/emails', {
-     *   method: 'POST',
-     *   headers: {
-     *     'Content-Type': 'application/json',
-     *     'Authorization': `Bearer ${Deno.env.get('RESEND_API_KEY')}`
-     *   },
-     *   body: JSON.stringify({
-     *     from: 'VibeBites <notifications@vibebites.gr>',
-     *     to: ['varveroglou@hotmail.gr'],
-     *     subject: `Νέο Μήνυμα από ${record.name}`,
-     *     html: `<p>Έχεις νέο μήνυμα!</p><p><strong>Από:</strong> ${record.name}</p><p><strong>Email:</strong> ${record.email}</p><p><strong>Μήνυμα:</strong> ${record.message}</p>`
-     *   })
-     * })
-     */
+    const resendApiKey = Deno.env.get('RESEND_API_KEY')
+    const adminEmail = Deno.env.get('ADMIN_EMAIL') || 'varveroglou@hotmail.gr'
+
+    if (resendApiKey) {
+      await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${resendApiKey}`
+        },
+        body: JSON.stringify({
+          from: 'VibeBites <notifications@vibebites.gr>',
+          to: [adminEmail],
+          subject: `Νέο Μήνυμα από ${record.name}`,
+          html: `
+            <h2>Έχεις νέο μήνυμα επικοινωνίας!</h2>
+            <p><strong>Από:</strong> ${record.name}</p>
+            <p><strong>Email:</strong> ${record.email}</p>
+            <p><strong>Μήνυμα:</strong></p>
+            <div style="padding: 15px; background: #f4f4f4; border-radius: 8px;">
+              ${record.message}
+            </div>
+            <hr />
+            <p><small>Αυτό το μήνυμα στάλθηκε αυτόματα από το VibeBites System.</small></p>
+          `
+        })
+      })
+    }
 
     return new Response(JSON.stringify({ success: true }), {
       headers: { ...cors, 'Content-Type': 'application/json' },

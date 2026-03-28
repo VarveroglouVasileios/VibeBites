@@ -5,6 +5,8 @@ definePageMeta({ middleware: 'admin' })
 
 const route = useRoute()
 const recipeId = route.params.id as string
+const authStore = useAuthStore()
+const user = useSupabaseUser()
 const recipeStore = useRecipeStore()
 const { uploadMultiple } = useMediaUpload()
 const router = useRouter()
@@ -113,10 +115,10 @@ async function handleSubmit() {
 
   submitting.value = true
   try {
-    // Upload new media
+    // Upload new media using user ID as folder for RLS compliance
     let newMediaUrls: string[] = []
-    if (form.media_files.length > 0) {
-      newMediaUrls = await uploadMultiple(form.media_files, 'recipe-media', Date.now().toString())
+    if (form.media_files.length > 0 && user.value) {
+      newMediaUrls = await uploadMultiple(form.media_files, 'recipe-media', user.value.id)
     }
 
     const allMediaUrls = [...existingMedia.value, ...newMediaUrls]

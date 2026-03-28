@@ -19,6 +19,10 @@ export default defineNuxtConfig({
     ].filter(Boolean),
   },
 
+  ogImage: {
+    enabled: true,
+  },
+
   // ─── Global SEO Defaults ────────────────────────────────
   app: {
     head: {
@@ -63,7 +67,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     groqApiKey: process.env.GROQ_API_KEY || '',
     public: {
-      appUrl: process.env.APP_URL || 'http://localhost:3000',
+      appUrl: process.env.APP_URL || 'http://localhost:3001',
     },
   },
 
@@ -139,7 +143,8 @@ export default defineNuxtConfig({
       installPrompt: true,
     },
     devOptions: {
-      enabled: false,
+      enabled: true,
+      type: 'module',
     },
   },
 

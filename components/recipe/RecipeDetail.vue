@@ -152,13 +152,16 @@ async function deleteRecipe () {
 
     <!-- Hero Section -->
     <section class="relative h-[50vh] min-h-[400px] w-full overflow-hidden md:h-[60vh]">
-      <img
+      <NuxtImg
         v-if="heroImageUrl"
         class="h-full w-full object-cover transition-transform duration-700"
         :class="cookingMode ? 'scale-105' : 'scale-100'"
         :src="heroImageUrl"
         :alt="recipe.title"
-      >
+        width="1200"
+        height="600"
+        format="webp"
+      />
       <div class="absolute inset-0 bg-gradient-to-t from-on-surface/80 via-transparent to-transparent" />
       <div class="absolute bottom-0 left-0 w-full p-6 md:p-12">
         <div class="mx-auto max-w-6xl">

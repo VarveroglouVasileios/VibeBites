@@ -39,11 +39,18 @@ export const useAuthStore = defineStore('auth', () => {
   async function updateProfile(updates: Partial<Profile>) {
     if (!user.value) return null
 
+    // Whitelist allowed fields to prevent privilege escalation (e.g. changing 'role')
+    const allowedUpdates = {
+      full_name: updates.full_name,
+      avatar_url: updates.avatar_url,
+      username: updates.username,
+    }
+
     loading.value = true
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .update(updates)
+        .update(allowedUpdates)
         .eq('id', user.value.id)
         .select()
         .single()
@@ -112,7 +119,6 @@ export const useAuthStore = defineStore('auth', () => {
   }, { immediate: true })
 
   return {
-    user,
     profile,
     loading,
     isLoggedIn,

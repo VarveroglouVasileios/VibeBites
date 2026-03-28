@@ -8,6 +8,7 @@ const { uploadFile, uploading: isUploadingAvatar } = useMediaUpload()
 const supabase = useSupabaseClient()
 
 const { profile, loading: authLoading } = storeToRefs(authStore)
+const user = useSupabaseUser()
 const userRecipes = ref<any[]>([])
 const loadingRecipes = ref(true)
 
@@ -19,11 +20,11 @@ const editForm = reactive({
 
 // Fetch user's recipes
 onMounted(async () => {
-  if (authStore.user) {
+  if (user.value) {
     const { data } = await supabase
       .from('recipes')
       .select('*, ratings(score)')
-      .eq('author_id', authStore.user.id)
+      .eq('author_id', user.value.id)
       .order('created_at', { ascending: false })
 
     userRecipes.value = (data || []).map((r: any) => ({
@@ -53,9 +54,9 @@ async function saveProfile() {
 async function handleAvatarUpload(event: Event) {
   const input = event.target as HTMLInputElement
   const file = input.files?.[0]
-  if (!file || !authStore.user) return
+  if (!file || !user.value) return
 
-  const url = await uploadFile(file, 'avatars', authStore.user.id)
+  const url = await uploadFile(file, 'avatars', user.value.id)
   if (url) {
     await authStore.updateProfile({ avatar_url: url })
   }

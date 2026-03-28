@@ -11,6 +11,7 @@ const vegan = ref(false)
 const loading = ref(false)
 const analyzing = ref(false)
 const saving = ref(false)
+const photoPreview = ref<string | null>(null)
 const errMsg = ref<string | null>(null)
 const suggestedRecipe = ref<FridgeRecipe | null>(null)
 
@@ -26,7 +27,11 @@ async function handleImageUpload(event: Event) {
     // Convert to base64
     const reader = new FileReader()
     const base64Promise = new Promise<string>((resolve) => {
-      reader.onload = () => resolve(reader.result as string)
+      reader.onload = () => {
+        const result = reader.result as string
+        photoPreview.value = result
+        resolve(result)
+      }
     })
     reader.readAsDataURL(file)
     const base64 = await base64Promise
@@ -47,6 +52,10 @@ async function handleImageUpload(event: Event) {
   } finally {
     analyzing.value = false
   }
+}
+
+function removePreview() {
+  photoPreview.value = null
 }
 
 const canSave = computed(() => Boolean(user.value))
@@ -176,6 +185,16 @@ async function onShare (recipe: FridgeRecipe) {
                   <input type="file" accept="image/*" class="hidden" @change="handleImageUpload" :disabled="analyzing" />
                 </label>
               </label>
+
+              <!-- Image Preview -->
+              <div v-if="photoPreview" class="mb-4 relative w-24 h-24 group animate-scale-in">
+                <img :src="photoPreview" class="w-full h-full object-cover rounded-2xl border-2 border-brand-500 shadow-glow" />
+                <button 
+                  @click="removePreview"
+                  class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                >✕</button>
+              </div>
+
               <textarea
                 v-model="rawIngredients"
                 class="h-32 w-full resize-none rounded-2xl border-none bg-surface-container-low p-4 font-body text-on-surface focus:ring-2 focus:ring-primary-container"

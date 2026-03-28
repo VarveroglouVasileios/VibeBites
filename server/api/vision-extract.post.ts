@@ -11,6 +11,14 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  // Basic size validation (e.g., max 10MB base64)
+  if (image.length > 10 * 1024 * 1024 * 1.35) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Image is too large'
+    })
+  }
+
   const apiKey = process.env.GROQ_API_KEY
   if (!apiKey) {
     throw createError({

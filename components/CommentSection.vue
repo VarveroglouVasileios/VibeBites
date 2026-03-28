@@ -8,6 +8,7 @@ const props = defineProps<{
 
 const recipeStore = useRecipeStore()
 const authStore = useAuthStore()
+const user = useSupabaseUser()
 const { uploadFile } = useMediaUpload()
 
 const newComment = ref('')
@@ -39,8 +40,8 @@ async function submitComment() {
   try {
     let photoUrl: string | undefined
 
-    if (photoFile.value) {
-      const url = await uploadFile(photoFile.value, 'comment-photos', props.recipeId)
+    if (photoFile.value && user.value) {
+      const url = await uploadFile(photoFile.value, 'comment-photos', user.value.id)
       if (url) photoUrl = url
     }
 

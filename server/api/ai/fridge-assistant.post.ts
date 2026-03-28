@@ -4,11 +4,24 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
   const body = await readBody<{ ingredients: string[]; isVegan: boolean }>(event)
 
-  // ─── Validate input ─────────────────────────────────
+  // ─── Validate & Sanitize input ──────────────────────
   if (!body.ingredients || !Array.isArray(body.ingredients) || body.ingredients.length === 0) {
     throw createError({
       statusCode: 400,
       statusMessage: 'Please provide at least one ingredient.',
+    })
+  }
+
+  // Basic sanitization: strip non-alphanumeric chars (except common ones) and limit length
+  // \u0370-\u03FF covers Greek characters
+  const sanitizedIngredients = body.ingredients
+    .map(i => String(i).replace(/[^\w\s\u0370-\u03FF,.-]/g, '').slice(0, 50))
+    .filter(i => i.trim().length > 0)
+
+  if (sanitizedIngredients.length === 0) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Invalid ingredients provided.',
     })
   }
 
@@ -55,7 +68,7 @@ Rules:
 - Instructions should be clear, numbered steps.
 - ALWAYS respond with valid JSON. No text before or after the JSON.`
 
-  const userMessage = `I have these ingredients: ${body.ingredients.join(', ')}.
+  const userMessage = `I have these ingredients: ${sanitizedIngredients.join(', ')}.
 ${body.isVegan ? 'I want a VEGAN recipe only.' : 'Create the best recipe you can.'}
 Please suggest a creative recipe.`
 

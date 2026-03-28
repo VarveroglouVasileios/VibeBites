@@ -4,6 +4,7 @@ const slug = route.params.slug as string
 
 const recipeStore = useRecipeStore()
 const authStore = useAuthStore()
+const user = useSupabaseUser()
 const { currentRecipe: recipe, loading } = storeToRefs(recipeStore)
 const config = useRuntimeConfig()
 
@@ -37,8 +38,8 @@ async function handleRate(score: number) {
 
 // Find user's existing rating
 const existingRating = computed(() => {
-  if (!recipe.value?.ratings || !authStore.user) return 0
-  const found = (recipe.value.ratings as any[]).find(r => r.user_id === authStore.user!.id)
+  if (!recipe.value?.ratings || !user.value) return 0
+  const found = (recipe.value.ratings as any[]).find(r => r.user_id === user.value?.id)
   return found?.score || 0
 })
 
