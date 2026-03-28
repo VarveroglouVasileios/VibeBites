@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://vibebites.app/sitemap.xml
