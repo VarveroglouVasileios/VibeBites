@@ -1,29 +1,33 @@
 <script setup lang="ts">
-useHead({ title: 'Explore · Culinary Curator' })
+useHead({ title: 'Εξερεύνηση' })
 </script>
 
 <template>
-  <div class="mx-auto max-w-3xl px-6 py-12 text-center">
-    <img
-      src="/stitch/assistant.png"
-      alt=""
-      class="mx-auto mb-8 max-h-64 rounded-3xl object-cover shadow-ambient"
-    >
-    <h1 class="font-headline text-3xl font-bold text-on-surface">
-      Explore
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+    <div class="relative inline-block mb-12 animate-float">
+      <div class="absolute inset-0 bg-brand-500/20 blur-3xl rounded-full" />
+      <img
+        src="/stitch/assistant.png"
+        alt="Explore"
+        class="relative z-10 mx-auto max-h-64 rounded-[2rem] object-cover shadow-2xl"
+      >
+    </div>
+    
+    <h1 class="font-display text-4xl font-extrabold text-surface-900 dark:text-white mb-4">
+      Ανακάλυψε Νέες Γεύσεις
     </h1>
-    <p class="mt-4 text-on-surface-variant">
-      Full search and social feed will hook into Supabase <code class="rounded bg-surface-container px-1 text-sm">search_recipes</code>.
-      For now, browse the
-      <NuxtLink
-        to="/"
-        class="font-semibold text-primary underline"
-      >home feed</NuxtLink>
-      or open
-      <NuxtLink
-        to="/recipes/demo"
-        class="font-semibold text-primary underline"
-      >the demo recipe</NuxtLink>.
+    <p class="text-lg text-surface-500 dark:text-surface-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+      Ετοιμάζουμε ένα μοναδικό social feed για να βλέπεις τι μαγειρεύει η κοινότητα. 
+      Για την ώρα, μπορείς να δεις τις trending συνταγές μας!
     </p>
+
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <NuxtLink to="/recipes" class="btn-glow">
+        🔍 Όλες οι Συνταγές
+      </NuxtLink>
+      <NuxtLink to="/ai-assistant" class="btn-secondary">
+        🤖 AI Βοηθός Ψυγείου
+      </NuxtLink>
+    </div>
   </div>
 </template>

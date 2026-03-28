@@ -1,21 +1,25 @@
 <script setup lang="ts">
-useHead({ title: 'Saved · Culinary Curator' })
+useHead({ title: 'Αποθηκευμένα' })
 </script>
 
 <template>
-  <div class="mx-auto max-w-lg px-6 py-16 text-center">
-    <span class="material-symbols-outlined text-5xl text-on-surface-variant">bookmark</span>
-    <h1 class="mt-6 font-headline text-2xl font-bold text-on-surface">
-      Saved recipes
+  <div class="max-w-lg mx-auto px-6 py-24 text-center animate-scale-in">
+    <div class="w-20 h-20 bg-brand-500/10 rounded-3xl flex items-center justify-center mx-auto mb-8">
+      <span class="material-symbols-outlined text-4xl text-brand-500">bookmark</span>
+    </div>
+    
+    <h1 class="font-display text-3xl font-bold text-surface-900 dark:text-white">
+      Αποθηκευμένες Συνταγές
     </h1>
-    <p class="mt-3 text-on-surface-variant">
-      Sign in with Supabase Auth to sync saved recipes across devices.
+    <p class="mt-4 text-surface-500 dark:text-surface-400 leading-relaxed">
+      Σύντομα θα μπορείς να αποθηκεύεις τις αγαπημένες σου συνταγές για να τις βρίσκεις εύκολα σε κάθε συσκευή.
     </p>
+    
     <NuxtLink
-      to="/recipes/demo"
-      class="mt-8 inline-block rounded-full bg-primary px-6 py-3 font-headline text-sm font-bold text-on-primary"
+      to="/recipes"
+      class="mt-10 btn-glow inline-block"
     >
-      Open demo recipe
+      Εξερεύνησε Συνταγές
     </NuxtLink>
   </div>
 </template>

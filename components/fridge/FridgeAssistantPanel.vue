@@ -164,50 +164,51 @@ async function onShare (recipe: FridgeRecipe) {
 </script>
 
 <template>
-  <div class="space-y-12">
-    <section class="relative overflow-hidden rounded-[2rem] bg-primary-container p-8 md:p-12">
+  <div class="space-y-8 md:space-y-12">
+    <section class="relative overflow-hidden rounded-3xl md:rounded-[2rem] bg-brand-500 dark:bg-brand-600 p-6 md:p-12 text-white shadow-xl">
       <div class="relative z-10 max-w-2xl">
-        <h1 class="mb-4 font-headline text-4xl font-extrabold leading-tight tracking-tight text-on-primary-container md:text-5xl">
-          Your Fridge is a <br><span class="text-white">Culinary Canvas.</span>
+        <h1 class="mb-4 font-display text-3xl md:text-5xl font-extrabold leading-tight tracking-tight">
+          Το Ψυγείο σου είναι <br><span class="text-brand-100">Καμβάς Δημιουργίας.</span>
         </h1>
-        <p class="mb-8 font-body text-lg text-on-primary-container/80">
-          Tell us what's on your shelves — AI returns structured JSON (title, ingredients, macros).
+        <p class="mb-8 font-display text-base md:text-lg text-white/80">
+          Πες μας τι έχεις στα ράφια σου — ο AI Βοηθός θα σου προτείνει μια ολοκληρωμένη συνταγή με όλα τα θρεπτικά συστατικά.
         </p>
 
-        <div class="rounded-3xl bg-surface-container-lowest p-4 shadow-xl shadow-on-primary-container/10">
+        <div class="glass-strong !bg-white/95 dark:!bg-surface-900/95 p-4 md:p-6 shadow-2xl">
           <div class="flex flex-col gap-4">
             <div class="relative">
-              <label class="mb-2 flex items-center justify-between px-2 text-[11px] font-bold uppercase tracking-widest text-on-surface-variant">
-                <span>What ingredients do you have?</span>
+              <label class="mb-2 flex items-center justify-between px-2 text-[10px] md:text-[11px] font-bold uppercase tracking-widest text-surface-500 dark:text-surface-400">
+                <span>Τι υλικά έχεις;</span>
                 <label class="flex items-center gap-1 text-brand-500 cursor-pointer hover:opacity-80 transition-opacity">
                   <span class="material-symbols-outlined text-sm">{{ analyzing ? 'sync' : 'photo_camera' }}</span>
-                  <span>{{ analyzing ? 'Ανάλυση...' : 'Φωτογραφία Ψυγείου' }}</span>
+                  <span class="text-[10px] md:text-xs">{{ analyzing ? 'Ανάλυση...' : 'Φωτογραφία Ψυγείου' }}</span>
                   <input type="file" accept="image/*" class="hidden" @change="handleImageUpload" :disabled="analyzing" />
                 </label>
               </label>
 
               <!-- Image Preview -->
-              <div v-if="photoPreview" class="mb-4 relative w-24 h-24 group animate-scale-in">
-                <img :src="photoPreview" class="w-full h-full object-cover rounded-2xl border-2 border-brand-500 shadow-glow" />
+              <div v-if="photoPreview" class="mb-4 relative w-20 h-20 md:w-24 md:h-24 group animate-scale-in">
+                <img :src="photoPreview" class="w-full h-full object-cover rounded-xl md:rounded-2xl border-2 border-brand-500 shadow-glow" />
                 <button 
                   @click="removePreview"
-                  class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                  class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
                 >✕</button>
               </div>
 
               <textarea
                 v-model="rawIngredients"
-                class="h-32 w-full resize-none rounded-2xl border-none bg-surface-container-low p-4 font-body text-on-surface focus:ring-2 focus:ring-primary-container"
-                placeholder="e.g. 2 Tomatoes, Spinach, Half an onion..."
+                class="h-32 w-full resize-none rounded-xl md:rounded-2xl border-none bg-surface-50 dark:bg-surface-800 p-4 font-sans text-sm md:text-base text-surface-900 dark:text-white focus:ring-2 focus:ring-brand-500/20 outline-none"
+                placeholder="π.χ. 2 ντομάτες, σπανάκι, μισό κρεμμύδι..."
               />
             </div>
-            <div class="flex flex-wrap items-center justify-between gap-4 px-2">
+            
+            <div class="flex flex-wrap items-center justify-between gap-4 px-1 md:px-2">
               <div class="flex items-center gap-3">
-                <span class="text-sm font-semibold text-on-surface-variant">Vegan Only</span>
+                <span class="text-xs md:text-sm font-semibold text-surface-700 dark:text-surface-300">Μόνο Vegan</span>
                 <button
                   type="button"
                   class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none"
-                  :class="vegan ? 'bg-primary-container' : 'bg-outline-variant'"
+                  :class="vegan ? 'bg-brand-500' : 'bg-surface-200 dark:bg-surface-700'"
                   @click="vegan = !vegan"
                 >
                   <span
@@ -216,31 +217,23 @@ async function onShare (recipe: FridgeRecipe) {
                   />
                 </button>
               </div>
+              
               <button
                 type="button"
-                class="flex items-center gap-2 rounded-full bg-primary px-8 py-3 font-bold text-on-primary transition-transform hover:scale-105 disabled:opacity-50"
+                class="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl md:rounded-full bg-brand-500 px-8 py-3 font-bold text-white transition-all hover:scale-105 active:scale-95 shadow-glow disabled:opacity-50"
                 :disabled="loading"
                 @click="runFridge"
               >
-                <span class="material-symbols-outlined">{{ loading ? 'sync' : 'auto_awesome' }}</span>
-                {{ loading ? 'Generating...' : 'Generate Recipe' }}
+                <span class="material-symbols-outlined text-lg">{{ loading ? 'sync' : 'auto_awesome' }}</span>
+                {{ loading ? 'Δημιουργία...' : 'Βρες μου Συνταγή!' }}
               </button>
             </div>
           </div>
         </div>
-        <p class="mt-4 text-sm text-on-primary-container/90">
-          Χρειάζεσαι <code class="rounded bg-black/10 px-1">GROQ_API_KEY</code> στο <code class="rounded bg-black/10 px-1">.env</code> για να τρέξει το AI τοπικά.
-        </p>
-        <p
-          v-if="!canSave"
-          class="mt-2 text-sm text-on-primary-container/80"
-        >
-          Συνδέσου με Supabase για να αποθηκεύεις συνταγές στη βάση.
-        </p>
       </div>
 
       <div class="pointer-events-none absolute -bottom-10 -right-10 hidden rotate-12 md:block">
-        <div class="h-64 w-64 overflow-hidden rounded-full border-8 border-white/20 shadow-2xl">
+        <div class="h-64 w-64 overflow-hidden rounded-full border-8 border-white/20 shadow-2xl backdrop-blur-sm">
           <img
             src="/stitch/assistant.png"
             alt=""
@@ -248,13 +241,14 @@ async function onShare (recipe: FridgeRecipe) {
           >
         </div>
       </div>
-      <div class="pointer-events-none absolute -right-20 top-0 hidden h-80 w-80 rounded-full bg-primary-fixed-dim/30 blur-3xl md:block" />
+      <div class="pointer-events-none absolute -right-20 top-0 hidden h-80 w-80 rounded-full bg-white/10 blur-3xl md:block" />
     </section>
 
     <div
       v-if="errMsg"
-      class="rounded-2xl bg-error-container/40 p-4 text-sm text-error"
+      class="rounded-xl bg-red-50 dark:bg-red-900/20 p-4 border border-red-100 dark:border-red-900/30 text-sm text-red-600 dark:text-red-400 flex items-center gap-3 animate-slide-down"
     >
+      <span class="material-symbols-outlined">error</span>
       {{ errMsg }}
     </div>
 

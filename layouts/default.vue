@@ -66,7 +66,7 @@ const navLinks = [
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col">
+  <div class="min-h-screen flex flex-col bg-surface-50 dark:bg-surface-950 transition-colors duration-300">
     <!-- Skip to main content -->
     <a
       href="#main-content"
@@ -170,18 +170,21 @@ const navLinks = [
                 v-for="link in navLinks"
                 :key="link.to"
                 :to="link.to"
-                class="px-4 py-3 rounded-xl text-sm font-medium transition-all"
+                class="px-4 py-3 rounded-xl text-sm font-semibold transition-all flex items-center justify-between group"
                 :class="route.path === link.to
                   ? 'bg-brand-500/10 text-brand-600 dark:text-brand-400'
-                  : 'text-surface-600 dark:text-surface-400'"
+                  : 'text-surface-600 dark:text-surface-400 hover:bg-surface-50 dark:hover:bg-surface-800/50'"
               >
-                <span class="mr-2" aria-hidden="true">{{ link.icon }}</span>
-                {{ link.label }}
+                <div class="flex items-center gap-3">
+                  <span class="text-lg" aria-hidden="true">{{ link.icon }}</span>
+                  {{ link.label }}
+                </div>
+                <span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
               </NuxtLink>
               <NuxtLink
                 v-if="authStore.isLoggedIn && authStore.isAdmin"
                 to="/recipes/create"
-                class="px-4 py-3 rounded-xl text-sm font-medium text-brand-600 dark:text-brand-400"
+                class="mt-2 px-4 py-3 rounded-xl text-sm font-bold bg-brand-500/5 text-brand-600 dark:text-brand-400 flex items-center gap-3"
               >
                 <span aria-hidden="true">✨</span> Νέα Συνταγή
               </NuxtLink>

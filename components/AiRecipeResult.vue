@@ -36,22 +36,22 @@ const macroColors = {
     </div>
 
     <!-- Macros -->
-    <div class="grid grid-cols-4 gap-3">
-      <div class="text-center p-3 rounded-xl bg-brand-500/10 dark:bg-brand-500/5">
-        <p class="text-2xl font-bold text-brand-600 dark:text-brand-400">{{ totalMacros.calories }}</p>
-        <p class="text-xs text-surface-500 mt-0.5">Calories</p>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4">
+      <div class="text-center p-3 md:p-4 rounded-xl bg-brand-500/10 dark:bg-brand-500/5 border border-brand-500/10 dark:border-brand-500/20">
+        <p class="text-xl md:text-2xl font-bold text-brand-600 dark:text-brand-400">{{ totalMacros.calories }}</p>
+        <p class="text-[10px] md:text-xs text-surface-500 uppercase tracking-widest font-bold mt-0.5">Calories</p>
       </div>
-      <div class="text-center p-3 rounded-xl bg-blue-500/10 dark:bg-blue-500/5">
-        <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ totalMacros.protein }}g</p>
-        <p class="text-xs text-surface-500 mt-0.5">Protein</p>
+      <div class="text-center p-3 md:p-4 rounded-xl bg-blue-500/10 dark:bg-blue-500/5 border border-blue-500/10 dark:border-blue-500/20">
+        <p class="text-xl md:text-2xl font-bold text-blue-600 dark:text-blue-400">{{ totalMacros.protein }}g</p>
+        <p class="text-[10px] md:text-xs text-surface-500 uppercase tracking-widest font-bold mt-0.5">Protein</p>
       </div>
-      <div class="text-center p-3 rounded-xl bg-amber-500/10 dark:bg-amber-500/5">
-        <p class="text-2xl font-bold text-amber-600 dark:text-amber-400">{{ totalMacros.carbs }}g</p>
-        <p class="text-xs text-surface-500 mt-0.5">Carbs</p>
+      <div class="text-center p-3 md:p-4 rounded-xl bg-amber-500/10 dark:bg-amber-500/5 border border-amber-500/10 dark:border-amber-500/20">
+        <p class="text-xl md:text-2xl font-bold text-amber-600 dark:text-amber-400">{{ totalMacros.carbs }}g</p>
+        <p class="text-[10px] md:text-xs text-surface-500 uppercase tracking-widest font-bold mt-0.5">Carbs</p>
       </div>
-      <div class="text-center p-3 rounded-xl bg-rose-500/10 dark:bg-rose-500/5">
-        <p class="text-2xl font-bold text-rose-600 dark:text-rose-400">{{ totalMacros.fat }}g</p>
-        <p class="text-xs text-surface-500 mt-0.5">Fat</p>
+      <div class="text-center p-3 md:p-4 rounded-xl bg-rose-500/10 dark:bg-rose-500/5 border border-rose-500/10 dark:border-rose-500/20">
+        <p class="text-xl md:text-2xl font-bold text-rose-600 dark:text-rose-400">{{ totalMacros.fat }}g</p>
+        <p class="text-[10px] md:text-xs text-surface-500 uppercase tracking-widest font-bold mt-0.5">Fat</p>
       </div>
     </div>
 

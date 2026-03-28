@@ -130,23 +130,25 @@ async function handleAvatarUpload(event: Event) {
         </div>
 
         <!-- Logout -->
-        <button @click="authStore.signOut" class="btn-ghost text-sm text-red-500 hover:text-red-600">
-          <span aria-hidden="true">🚪</span> Αποσύνδεση
-        </button>
+        <div class="sm:absolute sm:top-8 sm:right-8">
+          <button @click="authStore.signOut" class="btn-ghost text-sm text-red-500 hover:text-red-600 flex items-center gap-2">
+            <span aria-hidden="true">🚪</span> Αποσύνδεση
+          </button>
+        </div>
       </div>
     </div>
 
     <!-- User's Recipes -->
-    <div class="mt-10">
-      <h2 class="font-display text-xl font-bold text-surface-900 dark:text-white mb-6">
+    <div class="mt-10 md:mt-16">
+      <h2 class="font-display text-2xl font-bold text-surface-900 dark:text-white mb-8">
         <span aria-hidden="true">📖</span> Οι Συνταγές μου
       </h2>
 
       <div v-if="loadingRecipes" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div v-for="i in 3" :key="i" class="glass rounded-2xl overflow-hidden animate-pulse">
-          <div class="aspect-[4/3] bg-surface-200 dark:bg-surface-700" />
+        <div v-for="i in 3" :key="i" class="glass rounded-2xl overflow-hidden">
+          <Skeleton class-name="aspect-[4/3]" />
           <div class="p-4 space-y-3">
-            <div class="h-5 bg-surface-200 dark:bg-surface-700 rounded-lg w-3/4" />
+            <Skeleton class-name="h-5 w-3/4 rounded-lg" />
           </div>
         </div>
       </div>

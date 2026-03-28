@@ -134,24 +134,24 @@ async function deleteRecipe () {
 </script>
 
 <template>
-  <div :class="['min-h-screen transition-colors duration-500', cookingMode ? 'bg-surface-container-low' : 'bg-surface']">
+  <div :class="['min-h-screen transition-colors duration-500', cookingMode ? 'bg-surface-50 dark:bg-surface-900' : 'bg-white dark:bg-surface-950']">
     <!-- Social Summary Modal -->
     <BaseModal :show="showSocialModal" @close="showSocialModal = false">
       <div class="p-6">
-        <h3 class="text-xl font-bold mb-4">TikTok/Instagram Summary</h3>
-        <p class="text-sm text-surface-500 mb-4">Αυτό το κείμενο είναι έτοιμο για copy-paste στα social media σου!</p>
-        <div class="bg-surface-100 dark:bg-surface-800 p-4 rounded-xl text-sm font-mono whitespace-pre-wrap max-h-[400px] overflow-y-auto mb-6">
+        <h3 class="text-xl font-bold mb-4 dark:text-white">TikTok/Instagram Summary</h3>
+        <p class="text-sm text-surface-500 dark:text-surface-400 mb-4">Αυτό το κείμενο είναι έτοιμο για copy-paste στα social media σου!</p>
+        <div class="bg-surface-100 dark:bg-surface-800 p-4 rounded-xl text-sm font-mono whitespace-pre-wrap max-h-[400px] overflow-y-auto mb-6 dark:text-surface-200 border dark:border-surface-700">
           {{ socialSummary }}
         </div>
-        <div class="flex gap-3">
+        <div class="flex flex-col sm:flex-row gap-3">
           <button @click="copySocialSummary" class="btn-glow flex-1">Copy to Clipboard</button>
-          <button @click="showSocialModal = false" class="btn-secondary">Close</button>
+          <button @click="showSocialModal = false" class="btn-secondary flex-1">Close</button>
         </div>
       </div>
     </BaseModal>
 
     <!-- Hero Section -->
-    <section class="relative h-[50vh] min-h-[400px] w-full overflow-hidden md:h-[60vh]">
+    <section class="relative h-[40vh] min-h-[300px] w-full overflow-hidden md:h-[60vh]">
       <NuxtImg
         v-if="heroImageUrl"
         class="h-full w-full object-cover transition-transform duration-700"
@@ -162,21 +162,21 @@ async function deleteRecipe () {
         height="600"
         format="webp"
       />
-      <div class="absolute inset-0 bg-gradient-to-t from-on-surface/80 via-transparent to-transparent" />
+      <div class="absolute inset-0 bg-gradient-to-t from-surface-950/90 via-surface-950/40 to-transparent" />
       <div class="absolute bottom-0 left-0 w-full p-6 md:p-12">
         <div class="mx-auto max-w-6xl">
           <div class="mb-4 flex flex-wrap gap-2">
             <span
               v-if="recipe.is_vegan"
-              class="rounded-full bg-primary-container px-3 py-1 text-xs font-bold uppercase tracking-wider text-on-primary-container"
+              class="badge-success shadow-lg"
             >Vegan</span>
             <span
               v-if="recipe.cook_time"
-              class="rounded-full bg-surface-container-highest px-3 py-1 text-xs font-bold uppercase tracking-wider text-on-surface-variant"
+              class="badge-brand shadow-lg"
             >{{ recipe.cook_time }} Mins</span>
           </div>
           <h1
-            class="max-w-3xl font-headline text-4xl font-extrabold leading-tight tracking-tight text-white md:text-6xl"
+            class="max-w-3xl font-display text-3xl font-extrabold leading-tight tracking-tight text-white md:text-6xl drop-shadow-sm"
           >
             {{ recipe.title }}
           </h1>
@@ -184,28 +184,28 @@ async function deleteRecipe () {
       </div>
     </section>
 
-    <main class="mx-auto max-w-6xl px-6 pb-24 pt-12">
-      <div class="grid grid-cols-1 gap-12 lg:grid-cols-12">
+    <main class="mx-auto max-w-6xl px-4 sm:px-6 pb-24 pt-8 md:pt-12">
+      <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
         <!-- Left Column: Ingredients & Instructions -->
-        <div class="lg:col-span-8 space-y-16">
+        <div class="lg:col-span-8 space-y-12 md:space-y-16">
           <section id="ingredients">
-            <div class="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <h2 class="font-headline text-3xl font-bold tracking-tight">
-                Ingredients
+            <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <h2 class="font-display text-2xl md:text-3xl font-bold tracking-tight dark:text-white">
+                Υλικά
               </h2>
-              <div class="flex items-center gap-4 bg-surface-container-low px-4 py-2 rounded-2xl border border-outline-variant">
-                <span class="text-sm font-bold uppercase tracking-wider text-on-surface-variant">Servings</span>
+              <div class="flex items-center gap-4 bg-surface-50 dark:bg-surface-900 px-4 py-2 rounded-2xl border dark:border-surface-800">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-surface-500">Μερίδες</span>
                 <input 
                   v-model.number="targetServings" 
                   type="range" 
                   min="1" 
                   max="20" 
-                  class="w-24 accent-brand-500"
+                  class="w-20 md:w-24 accent-brand-500"
                 />
-                <span class="min-w-[2ch] font-headline text-xl font-bold text-primary">{{ targetServings }}</span>
+                <span class="min-w-[2ch] font-display text-xl font-bold text-brand-500">{{ targetServings }}</span>
               </div>
             </div>
-            <div class="rounded-3xl bg-surface-container-low p-6 md:p-8">
+            <div class="glass p-6 md:p-8">
               <IngredientChecklist 
                 :ingredients="sortedIngredients" 
                 :recipe-id="recipe.id"
@@ -216,26 +216,26 @@ async function deleteRecipe () {
           </section>
 
           <section id="instructions">
-            <h2 class="mb-8 font-headline text-3xl font-bold tracking-tight">
-              Instructions
+            <h2 class="mb-8 font-display text-2xl md:text-3xl font-bold tracking-tight dark:text-white">
+              Οδηγίες
             </h2>
-            <div class="space-y-12">
+            <div class="space-y-8 md:space-y-12">
               <template v-if="Array.isArray(recipe.instructions)">
                 <div
                   v-for="(step, idx) in recipe.instructions"
                   :key="idx"
-                  class="flex gap-6 transition-all duration-300"
-                  :class="cookingMode ? 'p-4 rounded-2xl bg-white shadow-ambient' : ''"
+                  class="flex gap-4 md:gap-6 transition-all duration-300"
+                  :class="cookingMode ? 'p-6 rounded-2xl bg-white dark:bg-surface-800 shadow-glow border border-brand-500/20' : ''"
                 >
                   <div
-                    class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-primary-container/20 font-headline text-xl font-bold text-primary transition-all duration-300"
+                    class="flex h-10 w-10 md:h-12 md:w-12 flex-shrink-0 items-center justify-center rounded-xl md:rounded-2xl bg-brand-500/10 dark:bg-brand-500/20 font-display text-lg md:text-xl font-bold text-brand-600 dark:text-brand-400 transition-all duration-300"
                   >
                     {{ idx + 1 }}
                   </div>
                   <div class="pt-1">
                     <div
-                      class="text-on-surface-variant"
-                      :class="cookingMode ? 'text-xl leading-relaxed md:text-2xl' : 'text-lg leading-relaxed'"
+                      class="text-surface-700 dark:text-surface-300"
+                      :class="cookingMode ? 'text-xl leading-relaxed md:text-3xl font-medium' : 'text-base md:text-lg leading-relaxed'"
                     >
                       {{ step }}
                     </div>
@@ -244,18 +244,18 @@ async function deleteRecipe () {
               </template>
               <div
                 v-else
-                class="flex gap-6 transition-all duration-300"
-                :class="cookingMode ? 'p-4 rounded-2xl bg-white shadow-ambient' : ''"
+                class="flex gap-4 md:gap-6 transition-all duration-300"
+                :class="cookingMode ? 'p-6 rounded-2xl bg-white dark:bg-surface-800 shadow-glow border border-brand-500/20' : ''"
               >
                 <div
-                  class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-primary-container/20 font-headline text-xl font-bold text-primary transition-all duration-300"
+                  class="flex h-10 w-10 md:h-12 md:w-12 flex-shrink-0 items-center justify-center rounded-xl md:rounded-2xl bg-brand-500/10 dark:bg-brand-500/20 font-display text-lg md:text-xl font-bold text-brand-600 dark:text-brand-400 transition-all duration-300"
                 >
                   1
                 </div>
                 <div class="pt-1">
                   <div
-                    class="whitespace-pre-wrap text-on-surface-variant"
-                    :class="cookingMode ? 'text-xl leading-relaxed md:text-2xl' : 'text-lg leading-relaxed'"
+                    class="whitespace-pre-wrap text-surface-700 dark:text-surface-300"
+                    :class="cookingMode ? 'text-xl leading-relaxed md:text-3xl font-medium' : 'text-base md:text-lg leading-relaxed'"
                   >
                     {{ recipe.instructions }}
                   </div>
@@ -268,66 +268,73 @@ async function deleteRecipe () {
         <!-- Right Column: Sidebar Stats & CTA -->
         <aside class="h-fit space-y-6 lg:sticky lg:top-28 lg:col-span-4">
           <!-- Enter Cooking Mode Card -->
-          <div class="rounded-[2rem] bg-gradient-to-br from-secondary to-secondary-container p-8 text-white shadow-xl">
-            <h3 class="mb-4 font-headline text-2xl font-extrabold">
-              {{ cookingMode ? 'Cooking Mode Active' : 'Ready to Start?' }}
+          <div class="rounded-3xl bg-gradient-to-br from-brand-500 to-brand-600 p-8 text-white shadow-xl relative overflow-hidden group">
+            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+              <span class="material-symbols-outlined text-6xl">restaurant_menu</span>
+            </div>
+            <h3 class="mb-4 font-display text-2xl font-extrabold relative z-10">
+              {{ cookingMode ? 'Cooking Mode Active' : 'Έτοιμος για μαγείρεμα;' }}
             </h3>
-            <p class="mb-8 leading-relaxed text-white/90">
+            <p class="mb-8 leading-relaxed text-white/90 relative z-10 text-sm md:text-base">
               {{
                 cookingMode
-                  ? 'Instruction text is enlarged. Your screen will stay awake while you cook.'
-                  : 'Enter cooking mode to get hands-free instructions and prevent your screen from dimming.'
+                  ? 'Οι οδηγίες έχουν μεγαλώσει για ευκολία. Η οθόνη θα παραμείνει ανοιχτή.'
+                  : 'Ενεργοποίησε το Cooking Mode για hands-free οδηγίες και αποφυγή σβησίματος της οθόνης.'
               }}
             </p>
             <button
-              class="flex w-full items-center justify-center gap-2 rounded-2xl bg-white py-4 font-headline text-lg font-black text-secondary shadow-lg transition-all hover:scale-[1.02] active:scale-95"
+              class="flex w-full items-center justify-center gap-2 rounded-2xl bg-white py-4 font-display text-lg font-black text-brand-600 shadow-lg transition-all hover:scale-[1.02] active:scale-95 relative z-10"
               @click="toggleCookingMode"
             >
               <span class="material-symbols-outlined">{{ cookingMode ? 'stop_circle' : 'play_circle' }}</span>
-              {{ cookingMode ? 'Exit Cooking Mode' : 'Enter Cooking Mode' }}
+              {{ cookingMode ? 'Έξοδος' : 'Έναρξη Cooking Mode' }}
             </button>
           </div>
 
-          <!-- Nutrition & Meta -->
+          <!-- Recipe Meta info -->
           <div
-            class="rounded-3xl border border-surface-container bg-surface-container-lowest p-6 shadow-sm"
+            class="glass p-6"
           >
-            <h4 class="mb-6 flex items-center gap-2 font-headline font-bold text-on-surface">
-              <span class="material-symbols-outlined text-emerald-600">nutrition</span>
-              Recipe Info
+            <h4 class="mb-6 flex items-center gap-2 font-display font-bold text-surface-900 dark:text-white uppercase tracking-widest text-xs">
+              <span class="material-symbols-outlined text-brand-500 text-sm">info</span>
+              Πληροφορίες
             </h4>
             <div class="grid grid-cols-2 gap-4">
               <div
                 v-if="recipe.servings"
-                class="rounded-2xl bg-surface-container-low p-4"
+                class="rounded-2xl bg-surface-50 dark:bg-surface-900/50 p-4 border dark:border-surface-800"
               >
-                <span class="mb-1 block text-xs font-bold uppercase tracking-wider text-on-surface-variant">Servings</span>
-                <span class="block font-headline text-xl font-bold text-on-surface">{{ recipe.servings }}</span>
+                <span class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-surface-500">Μερίδες</span>
+                <span class="block font-display text-xl font-bold text-surface-900 dark:text-white">{{ recipe.servings }}</span>
               </div>
               <div
                 v-if="recipe.cook_time"
-                class="rounded-2xl bg-surface-container-low p-4"
+                class="rounded-2xl bg-surface-50 dark:bg-surface-900/50 p-4 border dark:border-surface-800"
               >
-                <span class="mb-1 block text-xs font-bold uppercase tracking-wider text-on-surface-variant">Time</span>
-                <span class="block font-headline text-xl font-bold text-on-surface">{{ recipe.cook_time }}m</span>
+                <span class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-surface-500">Χρόνος</span>
+                <span class="block font-display text-xl font-bold text-surface-900 dark:text-white">{{ recipe.cook_time }}′</span>
               </div>
             </div>
           </div>
 
           <!-- Social Share -->
-          <div class="p-6 space-y-3">
+          <div class="glass p-6 space-y-3">
+            <h4 class="mb-4 flex items-center gap-2 font-display font-bold text-surface-900 dark:text-white uppercase tracking-widest text-xs">
+              <span class="material-symbols-outlined text-brand-500 text-sm">share</span>
+              Κοινοποίηση
+            </h4>
             <button
-              class="flex w-full items-center justify-center gap-2 rounded-2xl border border-outline-variant bg-white py-4 font-headline text-lg font-bold text-on-surface shadow-sm transition-all hover:bg-surface-container-low active:scale-95"
+              class="flex w-full items-center justify-center gap-2 rounded-2xl border dark:border-surface-700 bg-white dark:bg-surface-800 py-4 font-display text-sm font-bold text-surface-900 dark:text-white shadow-sm transition-all hover:bg-surface-50 dark:hover:bg-surface-700 active:scale-95"
               @click="onShare"
             >
-              <span class="material-symbols-outlined">share</span>
-              {{ canNativeShare ? 'Share with Friends' : 'Copy Link' }}
+              <span class="material-symbols-outlined text-lg">share</span>
+              {{ canNativeShare ? 'Μοιράσου το' : 'Αντιγραφή Link' }}
             </button>
             <button
-              class="flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-500/10 py-4 font-headline text-lg font-bold text-brand-600 shadow-sm transition-all hover:bg-brand-500/20 active:scale-95"
+              class="flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-500/10 py-4 font-display text-sm font-bold text-brand-600 dark:text-brand-400 shadow-sm transition-all hover:bg-brand-500/20 active:scale-95"
               @click="showSocialModal = true"
             >
-              <span class="material-symbols-outlined">auto_awesome</span>
+              <span class="material-symbols-outlined text-lg">auto_awesome</span>
               Social Summary
             </button>
           </div>
@@ -338,16 +345,17 @@ async function deleteRecipe () {
     <!-- Admin Action Bar -->
     <div
       v-if="auth.isAdmin"
-      class="fixed right-6 top-20 z-50 flex flex-col gap-3"
+      class="fixed bottom-6 right-6 z-50 flex flex-row md:flex-col gap-3 md:bottom-auto md:top-24"
     >
-      <button
-        class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-on-surface shadow-xl ring-1 ring-outline-variant transition-transform hover:scale-110 active:scale-95"
+      <NuxtLink
+        :to="`/recipes/edit/${recipe.id}`"
+        class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white dark:bg-surface-800 text-surface-900 dark:text-white shadow-xl ring-1 ring-black/5 dark:ring-white/10 transition-transform hover:scale-110 active:scale-95"
         title="Edit Recipe"
       >
         <span class="material-symbols-outlined">edit</span>
-      </button>
+      </NuxtLink>
       <button
-        class="flex h-12 w-12 items-center justify-center rounded-2xl bg-error-container text-error shadow-xl ring-1 ring-error transition-transform hover:scale-110 active:scale-95 disabled:opacity-50"
+        class="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 shadow-xl ring-1 ring-red-100 dark:ring-red-900/30 transition-transform hover:scale-110 active:scale-95 disabled:opacity-50"
         title="Delete Recipe"
         :disabled="isDeleting"
         @click="deleteRecipe"
