@@ -235,7 +235,7 @@ async function onShare (recipe: FridgeRecipe) {
       <div class="pointer-events-none absolute -bottom-10 -right-10 hidden rotate-12 md:block">
         <div class="h-64 w-64 overflow-hidden rounded-full border-8 border-white/20 shadow-2xl backdrop-blur-sm">
           <img
-            src="/stitch/assistant.png"
+            src="/pwa-512x512.png"
             alt=""
             class="h-full w-full object-cover"
           >

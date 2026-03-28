@@ -7,7 +7,7 @@ useHead({ title: 'Εξερεύνηση' })
     <div class="relative inline-block mb-12 animate-float">
       <div class="absolute inset-0 bg-brand-500/20 blur-3xl rounded-full" />
       <img
-        src="/stitch/assistant.png"
+        src="/pwa-512x512.png"
         alt="Explore"
         class="relative z-10 mx-auto max-h-64 rounded-[2rem] object-cover shadow-2xl"
       >
