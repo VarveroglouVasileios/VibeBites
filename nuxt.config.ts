@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     '@nuxt/image',
     'nuxt-og-image',
+    '@vercel/analytics',
   ],
 
   image: {
