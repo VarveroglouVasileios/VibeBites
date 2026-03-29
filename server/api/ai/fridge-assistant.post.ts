@@ -34,43 +34,52 @@ export default defineEventHandler(async (event) => {
 
   // ─── Build system prompt ────────────────────────────
   const veganConstraint = body.isVegan
-    ? 'The recipe MUST be 100% vegan. Do NOT include any animal products.'
+    ? 'Η συνταγή ΠΡΕΠΕΙ να είναι 100% vegan. Απαγορεύεται ΑΥΣΤΗΡΑ η χρήση κρέατος, πουλερικών, ψαριών, γαλακτοκομικών ή αυγών.'
     : ''
 
-  const systemPrompt = `You are a world-class chef assistant. The user will give you a list of ingredients they have in their fridge.
-You MUST respond ONLY with a valid JSON object matching this exact schema (no markdown, no explanation, no extra fields):
+  const systemPrompt = `Είσαι ένας κορυφαίος Έλληνας σεφ. Ο χρήστης θα σου δώσει μια λίστα με υλικά που έχει στο ψυγείο του.
+ΠΡΕΠΕΙ να απαντήσεις ΑΠΟΚΛΕΙΣΤΙΚΑ με ένα έγκυρο JSON αντικείμενο που να ακολουθεί ΑΚΡΙΒΩΣ αυτό το σχήμα:
 
 {
-  "title": "string — creative recipe name",
-  "description": "string — a 1-2 sentence description of the dish",
+  "title": "string — Ονομασία της συνταγής (π.χ. 'Ζουμερό Κοτόπουλο με Πατάτες')",
+  "description": "string — Μια σύντομη και λαχταριστή περιγραφή 1-2 προτάσεων στα Ελληνικά",
   "ingredients": [
     {
-      "name": "string — ingredient name",
-      "quantity": "string — amount (e.g. '2', '1/2')",
-      "unit": "string — unit (e.g. 'cups', 'tbsp', 'pieces')"
+      "name": "string — Όνομα υλικού στα Ελληνικά",
+      "quantity": "string — Ποσότητα (π.χ. '2', '1/2')",
+      "unit": "string — Μονάδα μέτρησης στα Ελληνικά (π.χ. 'φλιτζάνια', 'κ.σ.', 'τεμάχια', 'γραμμάρια')"
     }
   ],
-  "instructions": ["string — step 1", "string — step 2"],
+  "instructions": [
+    "string — Βήμα 1: Ξεκίνα με προετοιμασία των υλικών...",
+    "string — Βήμα 2: Ζέστανε το τηγάνι..."
+  ],
   "macros": {
-    "calories": "number — estimated total calories",
-    "protein": "number — grams of protein",
-    "carbs": "number — grams of carbohydrates",
-    "fat": "number — grams of fat"
+    "calories": "number — Εκτιμώμενες συνολικές θερμίδες",
+    "protein": "number — Γραμμάρια πρωτεΐνης",
+    "carbs": "number — Γραμμάρια υδατανθράκων",
+    "fat": "number — Γραμμάρια λιπαρών"
   },
-  "is_vegan": "boolean — whether the recipe is vegan"
+  "is_vegan": "boolean — true ΜΟΝΟ αν η συνταγή είναι 100% vegan. Αν περιέχει Κοτόπουλο, Κρέας, Τυρί, Φέτα, Αυγά ή Γάλα, πρέπει να είναι false."
 }
 
 ${veganConstraint}
 
-Rules:
-- Use ONLY the ingredients provided, plus common pantry staples (salt, pepper, oil, water, basic spices).
-- Provide realistic nutritional estimates.
-- Instructions should be clear, numbered steps.
-- ALWAYS respond with valid JSON. No text before or after the JSON.`
+Αυστηροί Κανόνες:
+- ΑΠΟΚΛΕΙΣΤΙΚΑ ΕΛΛΗΝΙΚΟ ΑΛΦΑΒΗΤΟ: Όλα τα κείμενα μέσα στο JSON (τίτλος, περιγραφή, υλικά, μονάδες, οδηγίες) ΠΡΕΠΕΙ να γράφονται ΜΟΝΟ με ελληνικούς χαρακτήρες (Ελληνικά). Απαγορεύονται αυστηρά τα Greeklish (π.χ. απαγορεύεται το "aromatika", γράψε "αρωματικά"). Απαγορεύονται τα αγγλικά ή τα γερμανικά.
+- ΦΥΣΙΚΗ ΓΡΑΜΜΑΤΙΚΗ ΚΟΥΖΙΝΑΣ: Οι ποσότητες και οι μονάδες πρέπει να βγάζουν νόημα στα Ελληνικά:
+  * Για κοτόπουλο/κρέας: "γραμμάρια", "μερίδες", ή "στήθος/μπούτι" (ΠΟΤΕ "1 τεμάχια", δεν το λέμε έτσι).
+  * Για κρεμμύδι: "μέτριο κρεμμύδι" (ΠΟΤΕ "1 κεφάλι", δεν το λέμε έτσι).
+  * Για σκόρδο: "σκελίδες" (π.χ. "2 σκελίδες σκόρδο").
+  * Για αλάτι/πιπέρι: γράψε στο amount/quantity "-" και στο unit "όσο χρειάζεται" ή "μια πρέζα" (ΠΟΤΕ "προς γεύση κ.σ.").
+  * Η ποσότητα "1" παίρνει τη λέξη στον ενικό. Π.χ. "1 τεμάχιο" (ΟΧΙ "1 τεμάχια").
+- ΜΑΓΕΙΡΙΚΗ ΛΟΓΙΚΗ: Οι οδηγίες μαγειρικής πρέπει να έχουν ΑΠΟΛΥΤΗ λογική. Μην γράφεις ποτέ "ψήστε στην κατσαρόλα" (το κρέας βράζεται ή τσιγαρίζεται σε κατσαρόλα). Ποτέ μην βάζεις ωμά μακαρόνια μέσα σε ψητό κρέας, τα μακαρόνια βράζονται σε αλατισμένο νερό ξεχωριστά!
+- Χρησιμοποίησε ΜΟΝΟ τα υλικά του χρήστη συν τα βασικά της κουζίνας (αλάτι, πιπέρι, ελαιόλαδο, νερό, μπαχαρικά).
+- Απάντησε ΜΟΝΟ με JSON. ΚΑΝΕΝΑ απολύτως κείμενο πριν ή μετά το JSON.`
 
-  const userMessage = `I have these ingredients: ${sanitizedIngredients.join(', ')}.
-${body.isVegan ? 'I want a VEGAN recipe only.' : 'Create the best recipe you can.'}
-Please suggest a creative recipe.`
+  const userMessage = `Έχω αυτά τα υλικά στο ψυγείο μου: ${sanitizedIngredients.join(', ')}.
+${body.isVegan ? 'Θέλω ΑΥΣΤΗΡΑ μια 100% VEGAN συνταγή.' : 'Φτιάξε μου την καλύτερη δυνατή και πιο νόστιμη συνταγή που μπορείς.'}
+Δώσε μου ρεαλιστικές, πρακτικές οδηγίες μαγειρικής σύμφωνα με την Ελληνική κουζίνα.`
 
   // ─── Call Groq API ──────────────────────────────────
   try {

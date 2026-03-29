@@ -24,10 +24,10 @@ const emit = defineEmits<{
       <div class="p-8 lg:col-span-8 md:p-12">
         <div class="mb-6 flex flex-wrap gap-2">
           <span class="flex items-center gap-1 rounded-full bg-emerald-500 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white">
-            <span class="material-symbols-outlined text-sm">auto_awesome</span> AI Curated
+            <span class="material-symbols-outlined text-sm">auto_awesome</span> Επιλογη AI
           </span>
           <span class="rounded-full bg-surface-container px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-on-surface">
-            New Recipe
+            Νεα Συνταγη
           </span>
         </div>
 
@@ -43,7 +43,7 @@ const emit = defineEmits<{
           <!-- Ingredients -->
           <div>
             <h3 class="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-primary">
-              Ingredients
+              Υλικα
             </h3>
             <ul class="space-y-3">
               <li
@@ -60,7 +60,7 @@ const emit = defineEmits<{
           <!-- Preparation -->
           <div>
             <h3 class="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-primary">
-              Preparation
+              Προετοιμασια
             </h3>
             <div class="space-y-6">
               <div class="flex gap-4">
@@ -82,26 +82,26 @@ const emit = defineEmits<{
               style="font-variation-settings: 'FILL' 1;"
             >analytics</span>
             <h3 class="font-headline text-lg font-bold text-on-surface">
-              AI Macros
+              Διατροφικά Στοιχεία
             </h3>
           </div>
 
           <div class="mb-8 space-y-4">
             <div class="flex items-end justify-between border-b border-outline-variant/30 pb-2">
-              <span class="font-label text-sm text-on-surface-variant">Calories</span>
+              <span class="font-label text-sm text-on-surface-variant">Θερμίδες</span>
               <span class="font-headline text-xl font-bold text-on-surface">{{ recipe.macros.calories }} kcal</span>
             </div>
             <div class="grid grid-cols-3 gap-2 text-center">
               <div class="rounded-2xl bg-surface-container-lowest p-3">
-                <span class="mb-1 block text-[10px] font-bold uppercase text-primary">Protein</span>
+                <span class="mb-1 block text-[10px] font-bold uppercase text-primary">Πρωτεΐνη</span>
                 <span class="text-lg font-black text-on-surface">{{ recipe.macros.protein_g }}g</span>
               </div>
               <div class="rounded-2xl bg-surface-container-lowest p-3">
-                <span class="mb-1 block text-[10px] font-bold uppercase text-secondary">Carbs</span>
+                <span class="mb-1 block text-[10px] font-bold uppercase text-secondary">Υδατάνθρακες</span>
                 <span class="text-lg font-black text-on-surface">{{ recipe.macros.carbs_g }}g</span>
               </div>
               <div class="rounded-2xl bg-surface-container-lowest p-3">
-                <span class="mb-1 block text-[10px] font-bold uppercase text-tertiary">Fats</span>
+                <span class="mb-1 block text-[10px] font-bold uppercase text-tertiary">Λιπαρά</span>
                 <span class="text-lg font-black text-on-surface">{{ recipe.macros.fat_g }}g</span>
               </div>
             </div>
@@ -109,7 +109,7 @@ const emit = defineEmits<{
 
           <div class="rounded-2xl bg-primary-fixed-dim/10 p-4">
             <p class="text-xs italic leading-relaxed text-on-primary-fixed-variant">
-              "This AI-curated recipe is optimized for the ingredients you have on hand."
+              "Αυτή η συνταγή δημιουργήθηκε από τον AI βοηθό με βάση τα υλικά που έχεις διαθέσιμα."
             </p>
           </div>
         </div>
@@ -123,17 +123,17 @@ const emit = defineEmits<{
             <span class="material-symbols-outlined">{{ loading ? 'sync' : 'bookmark' }}</span>
             {{
               loading
-                ? 'Saving...'
+                ? 'Αποθήκευση...'
                 : props.canSave
-                  ? 'Save to My Recipes'
-                  : 'Sign in to save'
+                  ? 'Αποθήκευση Συνταγής'
+                  : 'Συνδέσου για αποθήκευση'
             }}
           </button>
           <button
             class="flex items-center justify-center gap-2 rounded-2xl bg-surface-container-lowest py-4 font-bold text-on-surface shadow-sm transition-all hover:bg-surface-container-low active:scale-95"
             @click="emit('share', recipe)"
           >
-            <span class="material-symbols-outlined">share</span> Share
+            <span class="material-symbols-outlined">share</span> Κοινοποίηση
           </button>
         </div>
       </div>

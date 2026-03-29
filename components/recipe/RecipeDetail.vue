@@ -65,8 +65,23 @@ const { share, canNativeShare } = useRecipeShare()
 
 const targetServings = ref(props.recipe.servings || 1)
 const showSocialModal = ref(false)
+const userRating = ref(0)
 
 const shareUrl = computed(() => `${siteUrl.value}/recipes/${props.recipe.slug}`)
+
+// Find user's existing rating
+const existingRating = computed(() => {
+  if (!(props.recipe as any).ratings || !auth.user) return 0
+  const found = ((props.recipe as any).ratings as any[]).find(r => r.user_id === auth.user?.id)
+  return found?.score || 0
+})
+
+// Rate recipe
+async function handleRate(score: number) {
+  if (!props.recipe) return
+  userRating.value = score
+  await recipeStore.rateRecipe(props.recipe.id, score)
+}
 
 const socialSummary = computed(() => {
   const steps = Array.isArray(props.recipe.instructions) 
@@ -106,8 +121,10 @@ async function onShare () {
   }
 }
 import { useAuthStore } from '~/stores/auth'
+import { useRecipeStore } from '~/stores/recipes'
 
 const auth = useAuthStore()
+const recipeStore = useRecipeStore()
 const supabase = useSupabaseClient<Database>()
 const router = useRouter()
 
@@ -209,6 +226,7 @@ async function deleteRecipe () {
               <IngredientChecklist 
                 :ingredients="sortedIngredients" 
                 :recipe-id="recipe.id"
+                :recipe-title="recipe.title"
                 :target-servings="targetServings"
                 :original-servings="recipe.servings || 1"
               />
@@ -291,26 +309,55 @@ async function deleteRecipe () {
           <!-- Recipe Actions (Simplified) -->
           <div class="glass p-6 space-y-4">
             <h4 class="mb-4 flex items-center gap-2 font-display font-bold text-surface-900 dark:text-white uppercase tracking-widest text-[10px]">
-              Ενέργειες Συνταγής
+              Βαθμολογία
             </h4>
-            
-            <button
-              class="flex w-full items-center justify-center gap-3 rounded-2xl border-2 dark:border-surface-700 bg-white dark:bg-surface-800 py-3.5 font-display text-sm font-bold text-surface-900 dark:text-white shadow-sm transition-all hover:bg-surface-50 dark:hover:bg-surface-700 active:scale-95"
-              @click="onShare"
-            >
-              <span class="material-symbols-outlined text-lg">share</span>
-              {{ canNativeShare ? 'Μοιράσου το' : 'Αντιγραφή Link' }}
-            </button>
+            <div class="flex items-center justify-between">
+              <RatingStars
+                :model-value="userRating || existingRating"
+                :readonly="!auth.isLoggedIn"
+                @update:model-value="handleRate"
+              />
+              <span v-if="(recipe as any).average_rating" class="text-xs font-bold text-surface-500">
+                {{ Number((recipe as any).average_rating).toFixed(1) }} / 5
+              </span>
+            </div>
+            <p v-if="!auth.isLoggedIn" class="text-[10px] text-surface-400">
+              <NuxtLink to="/auth/login" class="text-brand-500 hover:underline">Συνδέσου</NuxtLink> για να βαθμολογήσεις.
+            </p>
 
-            <button
-              class="flex w-full items-center justify-center gap-3 rounded-2xl bg-brand-500/10 dark:bg-brand-500/20 py-3.5 font-display text-sm font-bold text-brand-600 dark:text-brand-400 shadow-sm transition-all hover:bg-brand-500/20 active:scale-95"
-              @click="showSocialModal = true"
-            >
-              <span class="material-symbols-outlined text-lg">auto_awesome</span>
-              Social Summary
-            </button>
+            <div class="pt-4 border-t border-surface-100 dark:border-surface-800 space-y-3">
+              <h4 class="mb-4 flex items-center gap-2 font-display font-bold text-surface-900 dark:text-white uppercase tracking-widest text-[10px]">
+                Ενέργειες Συνταγής
+              </h4>
+              
+              <button
+                class="flex w-full items-center justify-center gap-3 rounded-2xl border-2 dark:border-surface-700 bg-white dark:bg-surface-800 py-3.5 font-display text-sm font-bold text-surface-900 dark:text-white shadow-sm transition-all hover:bg-surface-50 dark:hover:bg-surface-700 active:scale-95"
+                @click="onShare"
+              >
+                <span class="material-symbols-outlined text-lg">share</span>
+                {{ canNativeShare ? 'Μοιράσου το' : 'Αντιγραφή Link' }}
+              </button>
+
+              <button
+                class="flex w-full items-center justify-center gap-3 rounded-2xl bg-brand-500/10 dark:bg-brand-500/20 py-3.5 font-display text-sm font-bold text-brand-600 dark:text-brand-400 shadow-sm transition-all hover:bg-brand-500/20 active:scale-95"
+                @click="showSocialModal = true"
+              >
+                <span class="material-symbols-outlined text-lg">auto_awesome</span>
+                Social Summary
+              </button>
+            </div>
           </div>
         </aside>
+      </div>
+
+      <!-- Comments Section -->
+      <div class="mt-16 pt-16 border-t border-surface-100 dark:border-surface-800">
+        <div class="max-w-3xl">
+          <CommentSection
+            :recipe-id="recipe.id"
+            :comments="(recipe as any).comments || []"
+          />
+        </div>
       </div>
     </main>
 

@@ -91,6 +91,36 @@ export type Database = {
           },
         ]
       }
+      contact_messages: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          status: string | null
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          status?: string | null
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          status?: string | null
+          subject?: string | null
+        }
+        Relationships: []
+      }
       ingredients: {
         Row: {
           id: string
@@ -122,6 +152,57 @@ export type Database = {
             columns: ["recipe_id"]
             isOneToOne: false
             referencedRelation: "recipes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      meal_plans: {
+        Row: {
+          calories: number | null
+          created_at: string | null
+          custom_description: string | null
+          custom_title: string | null
+          date: string
+          id: string
+          meal_type: string
+          recipe_id: string | null
+          user_id: string
+        }
+        Insert: {
+          calories?: number | null
+          created_at?: string | null
+          custom_description?: string | null
+          custom_title?: string | null
+          date: string
+          id?: string
+          meal_type: string
+          recipe_id?: string | null
+          user_id: string
+        }
+        Update: {
+          calories?: number | null
+          created_at?: string | null
+          custom_description?: string | null
+          custom_title?: string | null
+          date?: string
+          id?: string
+          meal_type?: string
+          recipe_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meal_plans_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "meal_plans_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -254,6 +335,60 @@ export type Database = {
           },
         ]
       }
+      shopping_list_items: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          id: string
+          is_checked: boolean | null
+          name: string
+          quantity: string | null
+          recipe_id: string | null
+          recipe_title: string | null
+          unit: string | null
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          is_checked?: boolean | null
+          name: string
+          quantity?: string | null
+          recipe_id?: string | null
+          recipe_title?: string | null
+          unit?: string | null
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          is_checked?: boolean | null
+          name?: string
+          quantity?: string | null
+          recipe_id?: string | null
+          recipe_title?: string | null
+          unit?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shopping_list_items_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shopping_list_items_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       recipe_ratings_avg: {
@@ -318,6 +453,8 @@ export type Ingredient = Database['public']['Tables']['ingredients']['Row']
 export type RecipeIngredientRow = Ingredient
 export type CommentRow = Database['public']['Tables']['comments']['Row']
 export type RatingRow = Database['public']['Tables']['ratings']['Row']
+export type ShoppingListItem = Database['public']['Tables']['shopping_list_items']['Row']
+export type MealPlan = Database['public']['Tables']['meal_plans']['Row']
 
 export type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
 

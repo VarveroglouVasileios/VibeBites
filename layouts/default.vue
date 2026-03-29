@@ -61,6 +61,8 @@ watch(() => route.path, () => {
 const navLinks = [
   { to: '/', label: 'Αρχική', icon: '🏠' },
   { to: '/recipes', label: 'Συνταγές', icon: '📖' },
+  { to: '/shopping', label: 'Λίστα Αγορών', icon: '🛒' },
+  { to: '/meal-planner', label: 'Πλάνο', icon: '📅' },
   { to: '/ai-assistant', label: 'AI Βοηθός', icon: '🤖' },
 ]
 </script>

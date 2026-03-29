@@ -39,34 +39,33 @@ const macroColors = {
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4">
       <div class="text-center p-3 md:p-4 rounded-xl bg-brand-500/10 dark:bg-brand-500/5 border border-brand-500/10 dark:border-brand-500/20">
         <p class="text-xl md:text-2xl font-bold text-brand-600 dark:text-brand-400">{{ totalMacros.calories }}</p>
-        <p class="text-[10px] md:text-xs text-surface-500 uppercase tracking-widest font-bold mt-0.5">Calories</p>
+        <p class="text-[10px] md:text-xs text-surface-500 uppercase tracking-widest font-bold mt-0.5">Θερμίδες</p>
       </div>
       <div class="text-center p-3 md:p-4 rounded-xl bg-blue-500/10 dark:bg-blue-500/5 border border-blue-500/10 dark:border-blue-500/20">
         <p class="text-xl md:text-2xl font-bold text-blue-600 dark:text-blue-400">{{ totalMacros.protein }}g</p>
-        <p class="text-[10px] md:text-xs text-surface-500 uppercase tracking-widest font-bold mt-0.5">Protein</p>
+        <p class="text-[10px] md:text-xs text-surface-500 uppercase tracking-widest font-bold mt-0.5">Πρωτεΐνη</p>
       </div>
       <div class="text-center p-3 md:p-4 rounded-xl bg-amber-500/10 dark:bg-amber-500/5 border border-amber-500/10 dark:border-amber-500/20">
         <p class="text-xl md:text-2xl font-bold text-amber-600 dark:text-amber-400">{{ totalMacros.carbs }}g</p>
-        <p class="text-[10px] md:text-xs text-surface-500 uppercase tracking-widest font-bold mt-0.5">Carbs</p>
+        <p class="text-[10px] md:text-xs text-surface-500 uppercase tracking-widest font-bold mt-0.5">Υδατάνθρακες</p>
       </div>
       <div class="text-center p-3 md:p-4 rounded-xl bg-rose-500/10 dark:bg-rose-500/5 border border-rose-500/10 dark:border-rose-500/20">
         <p class="text-xl md:text-2xl font-bold text-rose-600 dark:text-rose-400">{{ totalMacros.fat }}g</p>
-        <p class="text-[10px] md:text-xs text-surface-500 uppercase tracking-widest font-bold mt-0.5">Fat</p>
+        <p class="text-[10px] md:text-xs text-surface-500 uppercase tracking-widest font-bold mt-0.5">Λιπαρά</p>
       </div>
     </div>
 
-    <!-- Macro bars -->
     <div class="space-y-2">
-      <div v-for="(value, key) in { protein: totalMacros.protein, carbs: totalMacros.carbs, fat: totalMacros.fat }" :key="key" class="flex items-center gap-3">
-        <span class="w-16 text-xs text-surface-500 capitalize">{{ key }}</span>
+      <div v-for="(item, key) in { protein: { label: 'Πρωτεΐνη', value: totalMacros.protein }, carbs: { label: 'Υδατάνθρακες', value: totalMacros.carbs }, fat: { label: 'Λιπαρά', value: totalMacros.fat } }" :key="key" class="flex items-center gap-3">
+        <span class="w-24 text-xs text-surface-500">{{ item.label }}</span>
         <div class="flex-1 h-2 bg-surface-200 dark:bg-surface-700 rounded-full overflow-hidden">
           <div
             class="h-full rounded-full bg-gradient-to-r transition-all duration-1000 ease-out"
             :class="macroColors[key as keyof typeof macroColors]"
-            :style="{ width: `${Math.min((value / totalMacros.calories) * 400, 100)}%` }"
+            :style="{ width: `${Math.min((item.value / totalMacros.calories) * 400, 100)}%` }"
           />
         </div>
-        <span class="text-xs font-medium text-surface-600 dark:text-surface-400 w-10 text-right">{{ value }}g</span>
+        <span class="text-xs font-medium text-surface-600 dark:text-surface-400 w-10 text-right">{{ item.value }}g</span>
       </div>
     </div>
 

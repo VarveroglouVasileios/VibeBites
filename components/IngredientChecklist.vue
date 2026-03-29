@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { toast } from 'vue-sonner'
 import type { Ingredient as BaseIngredient } from '~/types'
 
 interface Ingredient extends Omit<BaseIngredient, 'sort_order'> {
@@ -8,9 +9,40 @@ interface Ingredient extends Omit<BaseIngredient, 'sort_order'> {
 const props = defineProps<{
   ingredients: Ingredient[]
   recipeId?: string
+  recipeTitle?: string
   targetServings?: number
   originalServings?: number
 }>()
+
+const shoppingStore = useShoppingStore()
+const user = useSupabaseUser()
+const addingToList = ref(false)
+
+async function addToShoppingList() {
+  if (!user.value) {
+    toast.error('Πρέπει να συνδεθείς πρώτα!')
+    return
+  }
+  if (!props.recipeId) return
+
+  addingToList.value = true
+  const uncheckedIngredients = props.ingredients
+    .filter(ing => !checked.value.has(ing.id))
+    .map(ing => ({ name: ing.name, quantity: ing.quantity, unit: ing.unit }))
+
+  const success = await shoppingStore.addFromRecipe(
+    props.recipeId,
+    props.recipeTitle || 'Συνταγή',
+    uncheckedIngredients
+  )
+  addingToList.value = false
+
+  if (success) {
+    toast.success(`${uncheckedIngredients.length} υλικά προστέθηκαν στη λίστα αγορών!`)
+  } else {
+    toast.error('Σφάλμα κατά την προσθήκη.')
+  }
+}
 
 const isGroceryMode = ref(false)
 const checked = ref<Set<string>>(new Set())
@@ -107,6 +139,18 @@ const progress = computed(() => {
         Grocery Mode {{ isGroceryMode ? 'ON' : 'OFF' }}
       </button>
     </div>
+
+    <!-- Add to Shopping List Button -->
+    <button
+      v-if="recipeId && user"
+      @click="addToShoppingList"
+      :disabled="addingToList"
+      class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-semibold transition-all duration-200 border-2 border-dashed border-brand-300 dark:border-brand-600 text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/20 hover:border-brand-500 disabled:opacity-50"
+    >
+      <span v-if="addingToList" class="animate-spin">⏳</span>
+      <span v-else aria-hidden="true">🛒</span>
+      {{ addingToList ? 'Προσθήκη...' : 'Προσθήκη στη Λίστα Αγορών' }}
+    </button>
 
     <!-- Categorized List (Grocery Mode) -->
     <template v-if="isGroceryMode">

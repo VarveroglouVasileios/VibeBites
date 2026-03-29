@@ -23,6 +23,7 @@ export interface Recipe {
   description: string | null
   instructions: RecipeStep[]
   cook_time: number | null
+  calories: number | null
   servings: number | null
   is_vegan: boolean
   media_urls: string[]
@@ -104,3 +105,33 @@ export interface RecipeFormData {
   ingredients: Omit<Ingredient, 'id' | 'recipe_id'>[]
   media_files: File[]
 }
+
+// ─── Shopping List ────────────────────────────────────
+export interface ShoppingItem {
+  id: string
+  user_id: string
+  name: string
+  quantity: string | null
+  unit: string | null
+  category: string
+  is_checked: boolean
+  recipe_id: string | null
+  recipe_title: string | null
+  created_at: string
+}
+
+// ─── Meal Planner ─────────────────────────────────────
+export interface MealPlan {
+  id: string
+  user_id: string
+  date: string
+  meal_type: 'breakfast' | 'lunch' | 'dinner' | 'snack'
+  recipe_id: string | null
+  custom_title: string | null
+  custom_description: string | null
+  calories: number | null
+  created_at: string
+  // Joined
+  recipe?: Recipe
+}
+
