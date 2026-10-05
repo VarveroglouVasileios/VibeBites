@@ -83,10 +83,31 @@ async function handleRate(score: number) {
   await recipeStore.rateRecipe(props.recipe.id, score)
 }
 
+function instructionText (step: unknown): string {
+  if (typeof step === 'string') return step
+  if (step && typeof step === 'object' && 'text' in step && typeof (step as { text: unknown }).text === 'string') {
+    return (step as { text: string }).text
+  }
+  return ''
+}
+
+const instructionSteps = computed(() => {
+  const raw = props.recipe.instructions
+  if (!Array.isArray(raw)) return []
+  return raw
+    .map((step, index) => ({
+      text: instructionText(step),
+      order: step && typeof step === 'object' && 'order' in step && typeof (step as { order: unknown }).order === 'number'
+        ? (step as { order: number }).order
+        : index + 1,
+    }))
+    .sort((a, b) => a.order - b.order)
+})
+
 const socialSummary = computed(() => {
-  const steps = Array.isArray(props.recipe.instructions) 
-    ? (props.recipe.instructions as any[]).map((s, i) => `${i+1}. ${s?.text || s}`).join('\n')
-    : props.recipe.instructions
+  const steps = instructionSteps.value.length
+    ? instructionSteps.value.map((step, i) => `${i + 1}. ${step.text}`).join('\n')
+    : instructionText(props.recipe.instructions)
   
   return `✨ ${props.recipe.title} ✨\n\n` +
     `🧾 Υλικά:\n${props.ingredients.map(i => `- ${i.quantity || ''} ${i.unit || ''} ${i.name}`).join('\n')}\n\n` +
@@ -238,9 +259,9 @@ async function deleteRecipe () {
               Οδηγίες
             </h2>
             <div class="space-y-8 md:space-y-12">
-              <template v-if="Array.isArray(recipe.instructions)">
+              <template v-if="instructionSteps.length">
                 <div
-                  v-for="(step, idx) in recipe.instructions"
+                  v-for="(step, idx) in instructionSteps"
                   :key="idx"
                   class="flex gap-4 md:gap-6 transition-all duration-300"
                   :class="cookingMode ? 'p-6 rounded-2xl bg-white dark:bg-surface-800 shadow-glow border border-brand-500/20' : ''"
@@ -255,7 +276,7 @@ async function deleteRecipe () {
                       class="text-surface-700 dark:text-surface-300"
                       :class="cookingMode ? 'text-xl leading-relaxed md:text-3xl font-medium' : 'text-base md:text-lg leading-relaxed'"
                     >
-                      {{ step }}
+                      {{ step.text }}
                     </div>
                   </div>
                 </div>
@@ -275,7 +296,7 @@ async function deleteRecipe () {
                     class="whitespace-pre-wrap text-surface-700 dark:text-surface-300"
                     :class="cookingMode ? 'text-xl leading-relaxed md:text-3xl font-medium' : 'text-base md:text-lg leading-relaxed'"
                   >
-                    {{ recipe.instructions }}
+                    {{ instructionText(recipe.instructions) }}
                   </div>
                 </div>
               </div>
