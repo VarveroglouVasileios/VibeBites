@@ -184,6 +184,14 @@ CREATE POLICY "Users can delete their own rating" ON public.ratings FOR DELETE U
 
 -- STORAGE
 INSERT INTO storage.buckets (id, name, public) VALUES ('recipe-media', 'recipe-media', true), ('avatars', 'avatars', true), ('comment-photos', 'comment-photos', true) ON CONFLICT (id) DO NOTHING;
+DROP POLICY IF EXISTS "Anyone can view recipe media" ON storage.objects;
+DROP POLICY IF EXISTS "Authenticated users can upload recipe media" ON storage.objects;
+DROP POLICY IF EXISTS "Users can delete their own recipe media" ON storage.objects;
+DROP POLICY IF EXISTS "Anyone can view avatars" ON storage.objects;
+DROP POLICY IF EXISTS "Authenticated users can upload avatars" ON storage.objects;
+DROP POLICY IF EXISTS "Users can update their own avatar" ON storage.objects;
+DROP POLICY IF EXISTS "Anyone can view comment photos" ON storage.objects;
+DROP POLICY IF EXISTS "Authenticated users can upload comment photos" ON storage.objects;
 CREATE POLICY "Anyone can view recipe media" ON storage.objects FOR SELECT USING (bucket_id = 'recipe-media');
 CREATE POLICY "Authenticated users can upload recipe media" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'recipe-media' AND auth.role() = 'authenticated');
 CREATE POLICY "Users can delete their own recipe media" ON storage.objects FOR DELETE USING (bucket_id = 'recipe-media' AND auth.uid()::text = (storage.foldername(name))[1]);

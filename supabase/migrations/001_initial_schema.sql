@@ -5,6 +5,14 @@
 -- Enable extensions
 CREATE EXTENSION IF NOT EXISTS unaccent;
 
+-- unaccent() is STABLE, so a generated column cannot call it directly.
+CREATE OR REPLACE FUNCTION public.immutable_unaccent(input text)
+RETURNS text
+LANGUAGE sql
+IMMUTABLE
+PARALLEL SAFE
+AS $$ SELECT public.unaccent('public.unaccent', input) $$;
+
 -- ══════════════════════ PROFILES ══════════════════════
 CREATE TABLE public.profiles (
   id          UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -65,7 +73,7 @@ CREATE TABLE public.recipes (
   updated_at   TIMESTAMPTZ DEFAULT now(),
   -- Full-Text Search (Greek dictionary)
   fts          TSVECTOR GENERATED ALWAYS AS (
-                 to_tsvector('simple', unaccent(coalesce(title, '') || ' ' || coalesce(description, '')))
+                 to_tsvector('simple', public.immutable_unaccent(coalesce(title, '') || ' ' || coalesce(description, '')))
                ) STORED
 );
 
